@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"strings"
 )
@@ -65,10 +66,17 @@ func ParseResponse(r io.Reader) ([][]URI, error) {
 	for _, bdg := range resp.Results.Bindings {
 		row := []URI{}
 		for _, varname := range resp.Head.Vars {
-			row = append(row, ParseURI(bdg[varname].(map[string]interface{})["value"].(string)))
+			vars, found := bdg[varname]
+			if !found {
+				break
+			}
+
+			row = append(row, ParseURI(vars.(map[string]interface{})["value"].(string)))
 		}
 		results = append(results, row)
 	}
+
+	fmt.Println("num results:", len(results))
 
 	return results, err
 }
