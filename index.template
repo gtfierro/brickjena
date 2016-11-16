@@ -74,16 +74,16 @@
           <div class="col-md-8">
             <form action="/query" method="post" id="queryform">
                 <label>Query: </label> <br /> <br />
-                <textarea class="form-control" id="querytext" style="font-family:monospace;"  rows="20" cols="30" name="query" placeholder="type query here"></textarea>
+                <textarea class="form-control" id="querytext" style="font-family:monospace;"  rows="20" cols="30" name="query" placeholder="type query here">{{.Chosen.Body}}</textarea>
                 <br /> <br />
                 <input type="hidden" name="token" value="{{.Token}}" /> <br />
                 <label>Building: </label>
                 <select name="building" class="form-control">
-                    <option value="SodaHall">Soda Hall</option>
-                    <option value="RiceHall">Rice Hall</option>
-                    <option value="EBU3B">Engineering Bldg 3B</option>
-                    <option value="Gates">Gates Hall</option>
-                    <option value="GreenTechCenter">Green Tech Center</option>
+                    <option value="SodaHall" {{index .Selected "SodaHall"}}="selected">Soda Hall</option>
+                    <option value="RiceHall" {{index .Selected "RiceHall"}}="selected">Rice Hall</option>
+                    <option value="EBU3B" {{index .Selected "EBU3B"}}="selected">Engineering Bldg 3B</option>
+                    <option value="Gates" {{index .Selected "Gates"}}="selected">Gates Hall</option>
+                    <option value="GreenTechCenter" {{index .Selected "GreenTechCenter"}}="selected">Green Tech Center</option>
                 </select>
                 <button class="btn btn-primary" type="submit">Query</button>
             </form>

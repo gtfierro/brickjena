@@ -167,9 +167,11 @@ type Q struct {
 }
 
 type TemplateContext struct {
-	Token   string
-	Queries []Q
-	Results [][]URI
+	Token    string
+	Selected map[string]string
+	Queries  []Q
+	Results  [][]URI
+	Chosen   Q
 }
 
 func index(w http.ResponseWriter, req *http.Request) {
@@ -189,6 +191,13 @@ func index(w http.ResponseWriter, req *http.Request) {
 	tc := TemplateContext{
 		Token:   token,
 		Queries: savedQueries,
+		Selected: map[string]string{
+			"SodaHall":        "notselected",
+			"RiceHall":        "notselected",
+			"EBU3B":           "notselected",
+			"Gates":           "notselected",
+			"GreenTechCenter": "notselected",
+		},
 	}
 	template.Execute(w, tc)
 }
@@ -225,12 +234,23 @@ func handlequery(w http.ResponseWriter, req *http.Request) {
 		Token:   token,
 		Queries: savedQueries,
 		Results: results,
+		Selected: map[string]string{
+			"SodaHall":        "notselected",
+			"RiceHall":        "notselected",
+			"EBU3B":           "notselected",
+			"Gates":           "notselected",
+			"GreenTechCenter": "notselected",
+		},
+		Chosen: Q{Body: query},
 	}
+	tc.Selected[building] = "selected"
+	log.Println(tc.Selected)
 	template.Execute(w, tc)
 }
 
 func main() {
 	flag.Parse()
+	log.Println(*fuseki)
 	fc = NewFusekiConn(*fuseki)
 	if *serve {
 		http.HandleFunc("/", index)
